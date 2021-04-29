@@ -3,7 +3,6 @@ from fpdf import FPDF
 
 
 
-
 """ FLASK APP
     from flask import Flask, redirect, url_for, render_template, send_file
 
