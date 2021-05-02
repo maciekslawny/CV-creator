@@ -55,26 +55,16 @@
 
 
         <!-- Experience table -->
-
+        <h3>Your experience:</h3>
         <div id="experience-table"> 
 
         </div>
 
 
         <!-- Education table -->
-
+        <h3>Your education:</h3>
         <div id="education-table">
 
-            <div class="card text-center mt-2">
-                <div class="card-body">
-                  <h5 class="card-title">Name of University</h5>
-                  <h6>Subject</h6>
-                  <p class="card-text">Description of what you have learned at university.</p>
-                </div>
-                <div class="card-footer text-muted">
-                  2015 - 2018
-                </div>
-            </div>
 
         </div>
         
@@ -141,28 +131,28 @@
                     <input type="text" id="university-name" class="form-control" placeholder="University name">
                 </div>
                 <div class="col-md-6">
-                    <input type="text" id="subject" class="form-control" placeholder="Subject">
+                    <input type="text" id="university-subject" class="form-control" placeholder="Subject">
                 </div>
             </div>
             <div class="row mt-2">
                 <div class="col-md-6">
                     <label for="">From date</label>
-                    <input type="date" id="from-date" class="form-control">
+                    <input type="date" id="university-from-date" class="form-control">
                 </div>
                 <div class="col-md-6">
                     <label for="">To date</label>
-                    <input type="date" id="to-date" class="form-control">
+                    <input type="date" id="university-to-date" class="form-control">
                 </div>
                 
                 
             </div>
             <div class="row mt-2">
                 <div class="col">
-                    <textarea type="text" id="description" class="form-control" placeholder="Description.."></textarea>
+                    <textarea type="text" id="university-description" class="form-control" placeholder="Description.."></textarea>
                 </div>
                 
             </div>
-            <button class="btn btn-primary" id="add-experience">Add</button>
+            <button class="btn btn-primary" id="add-education">Add</button>
         </div>
     
     
@@ -197,6 +187,23 @@
             return companyList
         }
 
+        function count_edu_elements(){
+            const uniList = []
+            elements = document.querySelectorAll(".edu-element")
+            elements.forEach(function(element){
+                uniName = element.querySelector('.universityName').textContent
+                subject = element.querySelector('.universitySubject').textContent
+                descrioption = element.querySelector('.universityDescription').textContent
+                fromDate = element.querySelector('.university-from-date').textContent
+                toDate = element.querySelector('.university-to-date').textContent
+                elementList = [uniName, subject, fromDate, toDate, descrioption]
+                uniList.push(elementList)
+            }) 
+            return uniList
+        }
+
+
+
 
         // ADDING EXPERIENCE TABLE
         const tableExp = document.getElementById('experience-table')
@@ -216,6 +223,7 @@
                   <h6 class="placeCompany">${placeCompany}</h6>
                   <h6 class="jobPosition">${jobPosition}</h6>
                   <p class="card-text desExperience">${desExperience}</p>
+                  <a class="delete-item">- Delete -</a>
                 </div>
                 <div class="card-footer text-muted">
                     <span class="company-from-date">${fromDate}</span> - <span class="company-to-date">${toDate}</span>
@@ -227,7 +235,41 @@
             document.getElementById('company-position').value = ''
             document.getElementById('company-place').value = ''
             document.getElementById('company-description').value = ''
+            document.getElementById('company-from-date').value = ''
+            document.getElementById('company-to-date').value = ''
         } )
+
+        // ADDING EDUCATION TABLE
+
+        const tableEdu = document.getElementById('education-table')
+        document.getElementById('add-education').addEventListener('click', function(){
+            console.log('test55')
+            const universityName = document.getElementById('university-name').value ;
+            const universitySubject = document.getElementById('university-subject').value;
+            const universityDescription = document.getElementById('university-description').value
+            const fromDate = document.getElementById('university-from-date').value
+            const toDate = document.getElementById('university-to-date').value
+
+            const div = document.createElement('div')
+            div.innerHTML = `<div class="card text-center mt-2 edu-element">
+                <div class="card-body">
+                  <h5 class="card-title universityName">${universityName}</h5>
+                  <h6 class="universitySubject">${universitySubject}</h6>
+                  <p class="card-text universityDescription">${universityDescription}</p>
+                  <a class="delete-item">- Delete -</a>
+                </div>
+                <div class="card-footer text-muted">
+                    <span class="university-from-date">${fromDate}</span> - <span class="university-to-date">${toDate}</span>
+                </div>
+            </div>`
+            tableEdu.appendChild(div)
+
+            document.getElementById('university-name').value = ''
+            document.getElementById('university-subject').value = ''
+            document.getElementById('university-description').value = ''
+            document.getElementById('university-from-date').value = ''
+            document.getElementById('university-to-date').value = ''
+        }) 
 
 
 
@@ -255,18 +297,30 @@
             })
         }
 
+        // DELETING ITEM
+
+
        
+
+        document.addEventListener('click', function(event){
+            if(event.target.classList == 'delete-item'){
+                event.target.parentNode.parentNode.remove()
+
+            }
+            
+        })
 
 
         // SENDING DATA TO PYTHON
         
         $("#klik").click(function(e){
-            var data = count_exp_elements();
+            const dataExp = count_exp_elements();
+            const dataUni = count_edu_elements();
+            const data = [dataExp, dataUni]
             $.ajax({
                 
                 url:'/send',
                 type:'POST',
-                
                 contentType: 'application/json',
                 data : JSON.stringify(data)
             });

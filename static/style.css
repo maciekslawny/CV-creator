@@ -5,3 +5,8 @@
 #experience-button, #education-button{
     cursor: pointer;
 }
+
+.delete-item{
+    cursor: pointer;
+    text-decoration: none;
+}
