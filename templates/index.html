@@ -21,18 +21,18 @@
             <h5 class="text-center">Personal info</h5>
             <div class="row">
                 <div class="col-md-6">
-                    <input type="text" class="form-control" placeholder="First name">
+                    <input type="text" class="form-control" id="name" placeholder="First name">
                 </div>
                 <div class="col-md-6">
-                    <input type="text" class="form-control" placeholder="Last name">
+                    <input type="text" class="form-control" id="surname" placeholder="Last name">
                 </div>
             </div>
             <div class="row mt-2">
                 <div class="col-md-6">
-                    <input type="email" class="form-control" placeholder="E-mail">
+                    <input type="email" class="form-control" id="email" placeholder="E-mail">
                 </div>
                 <div class="col-md-6">
-                    <input type="number" class="form-control" placeholder="Phone number">
+                    <input type="number" class="form-control" id="phone" placeholder="Phone number">
                     
                 </div>
             </div>
@@ -40,11 +40,11 @@
             <div class="row mt-2">
                 <div class="col-md-6">
                     <label for="">Birthday</label>
-                    <input type="date" class="form-control" placeholder="Birthday">
+                    <input type="date" class="form-control"  id="birthday" placeholder="Birthday">
                 </div>
                 <div class="col-md-6">
                     <label for="">Your city</label>
-                    <input type="city" class="form-control" placeholder="City">
+                    <input type="city" class="form-control" id="city" placeholder="City">
                 </div>
             </div>
 
@@ -165,7 +165,16 @@
     
     
 
-
+        // POBIERANIE DANYCH
+        function get_data(){
+            userName = document.getElementById('name').value
+            userSurname = document.getElementById('surname').value
+            userCity = document.getElementById('city').value
+            userBirthday = document.getElementById('birthday').value
+            userEmail = document.getElementById('email').value
+            userPhone = document.getElementById('phone').value
+            return [userName, userSurname, userEmail, userPhone, userBirthday, userCity]
+        }
         
         
 
@@ -181,12 +190,13 @@
                 descrioption = element.querySelector('.desExperience').textContent
                 fromDate = element.querySelector('.company-from-date').textContent
                 toDate = element.querySelector('.company-to-date').textContent
-                elementList = [title, place, position, fromDate, toDate, descrioption]
+                elementList = [title, position, place, fromDate, toDate, descrioption]
                 companyList.push(elementList)
             }) 
             return companyList
         }
 
+        // POBIERANIE DANYCH Z EDUCATION
         function count_edu_elements(){
             const uniList = []
             elements = document.querySelectorAll(".edu-element")
@@ -314,9 +324,10 @@
         // SENDING DATA TO PYTHON
         
         $("#klik").click(function(e){
+            const dataPersonal = get_data();
             const dataExp = count_exp_elements();
             const dataUni = count_edu_elements();
-            const data = [dataExp, dataUni]
+            const data = [dataPersonal, dataExp, dataUni]
             $.ajax({
                 
                 url:'/send',

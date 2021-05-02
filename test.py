@@ -1,4 +1,5 @@
 from flask import *
+from module import *
 
 
 app = Flask(__name__)
@@ -13,7 +14,11 @@ def main():
 def send():
     if request.method == "POST": 
         jsonData = request.get_json()
-        print (jsonData)
+        wynik = sort_data(jsonData)
+        print (wynik)
+        create_cv_pdf(wynik)
+        for company in wynik['experiences']:
+            print(wynik['experiences'][company])
         
     
         
