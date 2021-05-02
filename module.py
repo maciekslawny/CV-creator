@@ -79,24 +79,27 @@ def create_cv_pdf(input_data):
         pdf.cell(0,8, f'{input_data["experiences"][experience]["startdate"]} - {input_data["experiences"][experience]["enddate"]}', border=False, ln=True)
         pdf.cell(0,8, f'{input_data["experiences"][experience]["position"]} | {input_data["experiences"][experience]["name"]} | {input_data["experiences"][experience]["place"]}', border=False, ln=True)
         pdf.cell(0,10, 'Description:', border=False, ln=True)
-        pdf.cell(0,8, '- example 1', border=False, ln=True)
-        pdf.cell(0,8, '- example 1', border=False, ln=True)
-    
+        pdf.cell(0,8, f'{input_data["experiences"][experience]["description"]}', border=False, ln=True)
+        
     
 
-    # Education
     pdf.cell(0,10, 'EDUCATION', border=False, ln=True, align='C')
     pdf.cell(0,0, '', border=True, ln=True, align='C')
-    pdf.cell(0,5, '', border=False, ln=True, align='C')
-    pdf.set_font('helvetica', 'B', 14)
-    pdf.cell(0,8, '01.2019 - 09.2020', border=False, ln=True)
-    pdf.set_font('helvetica', '', 16)
-    pdf.cell(0,8, 'Name of University | Subject', border=False, ln=True)
-    pdf.set_font('helvetica', 'B', 14)
-    pdf.cell(0,10, 'Description:', border=False, ln=True)
-    pdf.set_font('helvetica', '', 16)
-    pdf.cell(0,8, '- example 1', border=False, ln=True)
-    pdf.cell(0,8, '- example 1', border=False, ln=True)
+
+
+    # Education
+    for education in input_data['education']:
+
+        pdf.cell(0,5, '', border=False, ln=True, align='C')
+        pdf.set_font('helvetica', 'B', 14)
+        pdf.cell(0,8, f'{input_data["education"][education]["startdate"]} - {input_data["education"][education]["enddate"]}', border=False, ln=True)
+        pdf.set_font('helvetica', '', 16)
+        pdf.cell(0,8, f'{input_data["education"][education]["name"]} | {input_data["education"][education]["subject"]}', border=False, ln=True)
+        pdf.set_font('helvetica', 'B', 14)
+        pdf.cell(0,10, 'Description:', border=False, ln=True)
+        pdf.set_font('helvetica', '', 16)
+        pdf.cell(0,8, f'{input_data["education"][education]["description"]}', border=False, ln=True)
+        
 
     try: 
         pdf.output('pdf_3.pdf')
