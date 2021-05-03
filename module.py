@@ -1,4 +1,5 @@
 from fpdf import FPDF
+import random
 
 def sort_data(input_data):
     personal = {
@@ -50,12 +51,12 @@ def sort_data(input_data):
     return output_data
 
 
-def create_cv_pdf(input_data):
+def create_cv_pdf(input_data, image_name):
     pdf = FPDF('P', 'mm', 'A4')
     pdf.set_auto_page_break(auto=True, margin = 15)
     pdf.add_page()
     pdf.set_font('helvetica', '', 16)
-    pdf.image('profilowe.jpg', 20, 10, 40)
+    pdf.image(f'uploads/{image_name}', 20, 10, 40)
 
 
 
@@ -102,6 +103,13 @@ def create_cv_pdf(input_data):
         
 
     try: 
-        pdf.output('pdf_3.pdf')
+        random_number = str(random.randint(0, 99999))
+        while (len(random_number) < 5):
+            random_number = '0' + random_number
+        file_name = 'cv-' + random_number
+        pdf.output(f'cv/{file_name}.pdf')
+        return file_name
     except:
         print('Błąd: otwaty pdf')
+
+

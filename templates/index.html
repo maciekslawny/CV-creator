@@ -9,14 +9,18 @@
     <title>Document</title>
 </head>
 <body>
+    <!--<form action="/send" method="post" enctype="multipart/form-data"> -->
     
-        
-    <button id="klik" type="submit">klik ;)</button>        
+    
+    <!-- <button type="submit" id="klik">hej</button> -->  
+    <!--  <button id="klik" type="submit">klik ;)</button>       --> 
     
 
 
     <div class="container mt-5">
         <h1 class="text-center my-4">CV Creator</h3>
+        <input type="file" id="file" name="file"/>
+        <input id="btn-upload-photo" type="submit" />
         <form>
             <h5 class="text-center">Personal info</h5>
             <div class="row">
@@ -156,6 +160,13 @@
         </div>
     
     
+        <button id="btn-generate-cv" class="btn btn-warning btn-lg w-100 my-5" >GENERATE CV</button>
+        
+        {% if path %}
+            <form action="/download/{{path}}" method="POST">
+                <button class="btn btn-success btn-lg w-100" type="submit" action="/download">DOWNLOAD!</button>
+            </form>
+        {% endif %}
 
     </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -321,22 +332,56 @@
         })
 
 
-        // SENDING DATA TO PYTHON
+
+
+
+
+        // UPLOAD PHOTO
         
-        $("#klik").click(function(e){
+        $("#btn-upload-photo").click(function(e){
+            var form_data = new FormData();
+            form_data.append('file', $('#file').prop('files')[0]);
+            $.ajax({
+                url:'/upload',
+                type:'POST',
+                contentType: 'application/json',
+                data: form_data,
+                contentType: false,
+                cache: false,
+                processData: false, 
+            });
+            e.preventDefault();
+        })
+
+
+
+        $("#btn-generate-cv").click(function(e){
+            
+            
             const dataPersonal = get_data();
             const dataExp = count_exp_elements();
             const dataUni = count_edu_elements();
             const data = [dataPersonal, dataExp, dataUni]
+            
             $.ajax({
                 
                 url:'/send',
                 type:'POST',
                 contentType: 'application/json',
-                data : JSON.stringify(data)
+                data : JSON.stringify(data),
+                // enctype: 'multipart/form-data'
+                success:function(response){
+                document.write(response); 
+            }
+                
+                
+                
             });
             e.preventDefault();
         })
+
+
+
 
 
 
